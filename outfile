@@ -1,9 +1,0 @@
-build
-en.subject.pdf
-infile
-lib
-Makefile
-outfile
-pipex
-pipex.c
-pipex.h

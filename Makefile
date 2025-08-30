@@ -12,6 +12,7 @@ SRCS_DIR = src/
 
 LIB = lib/libft.a
 SRCS = pipex.c \
+		pipex_utils.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 
