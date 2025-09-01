@@ -6,72 +6,72 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/08/30 22:31:36 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/01 20:30:00 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/libft.h"
 
-static void	free_path(char	**all_path, int i)
+void	hdl_error(char *err_msg)
 {
-	if (all_path && all_path[i])
+	ft_printf("pipex: ");
+	perror(err_msg);
+	exit(EXIT_FAILURE);
+}
+
+static void	free_path_list(char	**path_list, int i)
+{
+	if (path_list)
 	{
-		while (all_path[i])
-		{
-			free(all_path[i]);
-			i++;
-		}
-		free(all_path);
+		while (path_list[i])
+			free(path_list[i++]);
+		free(path_list);
 	}
 }
 
-static char	*get_path(char *cmd, char **env)
+static char	*get_path_list(char *cmd, char **env)
 {
 	int		i;
-	char	**all_path;
+	char	**path_list;
 	char	*tmp;
 	char	*ret;
 
-	if (!env)
-		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
-		return (cmd);
+		return (ft_strdup(cmd));
 	i = 0;
-	while (ft_strncmp(env[i], "PATH", 4))
+	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
 		i++;
-	all_path = ft_split(&env[i][4], ':');
+	if (!env[i])
+		return (NULL);
+	path_list = ft_split(&env[i][5], ':');
 	i = 0;
-	while (all_path[i])
+	while (path_list[i])
 	{
-		tmp = ft_strjoin(all_path[i], "/");
+		tmp = ft_strjoin(path_list[i], "/");
 		ret = ft_strjoin(tmp, cmd);
 		if (access(ret, F_OK | X_OK) == 0)
-			return (free_path(all_path, i + 1), ret);
+			return (free_path_list(path_list, i + 1), ret);
 		free(ret);
 		i++;
 	}
-	free_path(all_path, i + 1);
+	free_path_list(path_list, i);
 	return (NULL);
 }
 
-void	ft_exec(char *cmd, char **env)
+void	exec_cmd(char *cmd, char **env)
 {
 	char	**s_cmd;
 	char	*path;
 
 	if (!cmd || !cmd[0])
-	{
-		perror("invalid command");
-		exit(EXIT_FAILURE);
-	}
+		hdl_error("invalid command\n");
 	s_cmd = ft_split(cmd, ' ');
-	path = get_path(s_cmd[0], env);
+	path = get_path_list(s_cmd[0], env);
 	printf("%s\n", path);
 	if (execve(path, s_cmd, env) == -1)
 	{
-		ft_printf("cmd not found");
-		free(s_cmd);
+		free_dtab(s_cmd);
 		free(path);
-		exit(EXIT_FAILURE);
+		hdl_error("cmd not found");
 	}
 }
