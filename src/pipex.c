@@ -6,11 +6,11 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 16:10:41 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 17:05:33 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/pipex.h"
 
 static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 {

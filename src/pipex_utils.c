@@ -6,11 +6,11 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 15:41:33 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 17:05:21 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/pipex.h"
 
 void	hdl_error(char *err_msg)
 {

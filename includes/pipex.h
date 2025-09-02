@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:39:51 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 15:41:08 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 17:05:40 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define PIPEX_H
 
-# include "lib/libft.h"
+# include "../lib/libft.h"
 
 void	exec_cmd(char *cmd, char **env);
 void	hdl_error(char *err_msg);
