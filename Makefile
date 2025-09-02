@@ -1,4 +1,5 @@
 NAME = pipex
+BONUS_NAME = pipex_bonus
 
 RED				= \e[31m
 GREEN			= \e[32m
@@ -14,14 +15,24 @@ LIB = lib/libft.a
 SRCS = pipex.c \
 		pipex_utils.c
 
+BONUS_SRC = pipex_bonus.c 
+
 OBJS = $(SRCS:%.c=build/%.o)
+BONUS_OBJS = $(BONUS_SRC:%.c=build/%.o)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g 
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIB) $(MLX_LIB)
+$(NAME): $(OBJS) $(LIB) 
+	@echo "$(GREEN)Linking $@$(NO_COLOR)"
+	@$(CC) $(CFLAGS) -o $@ $^ 
+	@echo "$(GREEN)Build complete$(NO_COLOR)"
+
+bonus: $(BONUS_NAME)
+
+$(BONUS_NAME): $(BONUS_OBJS) $(LIB) 
 	@echo "$(GREEN)Linking $@$(NO_COLOR)"
 	@$(CC) $(CFLAGS) -o $@ $^ 
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
@@ -30,6 +41,8 @@ $(LIB):
 	@$(MAKE) -C lib lib
 
 $(OBJS): | build
+
+$(BONUS_OBJS): | build
 
 build:
 	@mkdir -p build

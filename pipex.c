@@ -6,16 +6,13 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/01 20:28:26 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 15:41:20 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/libft.h"
+#include "pipex.h"
 
-void	exec_cmd(char *cmd, char **env);
-void	hdl_error(char *err_msg);
-
-static void	ft_tipeu1(char **av, char **env, int pipefd[2])
+static void	ft_tipeu1(int ac, char **av, char **env, int pipefd[2], int i)
 {
 	int	fd;
 
@@ -29,7 +26,7 @@ static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 	exec_cmd(av[2], env);
 }
 
-static void	ft_tipeu2(char **av, char **env, int pipefd[2])
+static void	ft_tipeu2(int ac, char **av, char **env, int pipefd[2], int i)
 {
 	int	fd;
 
@@ -47,6 +44,7 @@ int	main(int ac, char **av, char **env)
 {
 	int		pipefd[2];
 	int		pid;
+	int		i;
 
 	if (ac < 5)
 		hdl_error("too few arguments\n");
@@ -54,12 +52,16 @@ int	main(int ac, char **av, char **env)
 		hdl_error("too many arguments\n");
 	if (pipe(pipefd) == -1)
 		hdl_error("pipe\n");
-	pid = fork();
-	if (pid == 0)
-		ft_tipeu1(av, env, pipefd);
-	pid = fork();
-	if (pid == 0)
-		ft_tipeu2(av, env, pipefd);
+	i = 1;
+	while (i < ac - 1)
+	{
+		pid = fork();
+		if (pid == 0)
+			ft_tipeu1(ac, av, env, pipefd, i);
+		pid = fork();
+		if (pid == 0)
+			ft_tipeu2(ac, av, env, pipefd, i);
+	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	while (wait(NULL) > 0)

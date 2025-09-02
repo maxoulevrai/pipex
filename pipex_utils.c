@@ -6,11 +6,11 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/01 20:30:00 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 15:41:33 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/libft.h"
+#include "pipex.h"
 
 void	hdl_error(char *err_msg)
 {
@@ -19,7 +19,7 @@ void	hdl_error(char *err_msg)
 	exit(EXIT_FAILURE);
 }
 
-static void	free_path_list(char	**path_list, int i)
+void	free_path_list(char	**path_list, int i)
 {
 	if (path_list)
 	{
@@ -29,7 +29,7 @@ static void	free_path_list(char	**path_list, int i)
 	}
 }
 
-static char	*get_path_list(char *cmd, char **env)
+char	*get_path_list(char *cmd, char **env)
 {
 	int		i;
 	char	**path_list;
