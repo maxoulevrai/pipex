@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 15:59:51 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 16:16:16 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,35 @@
 
 void	hdl_here_doc(char *LIMITER)
 {
+	pid_t	pid;
+	int		pipefd[2];
+	char	*line;
 
+	if (pipe(pipefd) == -1)
+		hdl_error("pipe");
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipefd[0]);
+		line = get_next_line(STDIN_FILENO);
+		while (line)
+		{
+			if (ft_strncmp(line, LIMITER, ft_strlen(LIMITER)) == 0)
+			{
+				free(line);
+				exit(EXIT_SUCCESS);
+			}
+			write(pipefd[1], &line, ft_strlen(line));
+			free(line);
+			get_next_line(STDIN_FILENO);
+		}
+	}
+	else
+	{
+		close(pipefd[1]);
+		dup2(pipefd[1], STDIN_FILENO);
+		wait(NULL);
+	}
 }
 
 static void	ft_tipeu(char *av, char **env)
@@ -29,7 +57,7 @@ static void	ft_tipeu(char *av, char **env)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
-		exec(av, env);
+		exec_cmd(av, env);
 	}
 	else
 	{
@@ -49,6 +77,8 @@ int	main(int ac, char **av, char **env)
 		hdl_error("too few arguments");
 	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 	{
+		if (ac < 6)
+			hdl_error("NOOOOOO");
 		i = 3;
 		outfile = open(av[ac - 2], O_WRONLY, O_APPEND, O_CREAT, 0777);
 		hdl_here_doc(av[2]);
@@ -60,7 +90,7 @@ int	main(int ac, char **av, char **env)
 		outfile = open(av[ac - 2], O_WRONLY, O_TRUNC, O_CREAT, 0777);
 		dup2(infile, STDIN_FILENO);
 	}
-	while (i < ac - 2)
+	while (i < ac - 1)
 		ft_tipeu(av[i], env);
 	dup2(outfile, STDOUT_FILENO);
 	exec_cmd(av[ac - 2], env);

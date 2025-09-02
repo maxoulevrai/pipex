@@ -6,13 +6,13 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 15:41:20 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/02 16:10:41 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	ft_tipeu1(int ac, char **av, char **env, int pipefd[2], int i)
+static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 {
 	int	fd;
 
@@ -26,7 +26,7 @@ static void	ft_tipeu1(int ac, char **av, char **env, int pipefd[2], int i)
 	exec_cmd(av[2], env);
 }
 
-static void	ft_tipeu2(int ac, char **av, char **env, int pipefd[2], int i)
+static void	ft_tipeu2(char **av, char **env, int pipefd[2])
 {
 	int	fd;
 
@@ -57,10 +57,10 @@ int	main(int ac, char **av, char **env)
 	{
 		pid = fork();
 		if (pid == 0)
-			ft_tipeu1(ac, av, env, pipefd, i);
+			ft_tipeu1(av, env, pipefd);
 		pid = fork();
 		if (pid == 0)
-			ft_tipeu2(ac, av, env, pipefd, i);
+			ft_tipeu2(av, env, pipefd);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);

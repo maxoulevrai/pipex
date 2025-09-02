@@ -15,7 +15,8 @@ LIB = lib/libft.a
 SRCS = pipex.c \
 		pipex_utils.c
 
-BONUS_SRC = pipex_bonus.c 
+BONUS_SRC = pipex_bonus.c \
+			pipex_utils.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 BONUS_OBJS = $(BONUS_SRC:%.c=build/%.o)
