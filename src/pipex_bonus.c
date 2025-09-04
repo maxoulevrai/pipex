@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/02 17:49:59 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/04 19:46:42 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}
+	free(limiter_nl);
+	free(line);
 }
 static void	hdl_here_doc(char *LIMITER)
 {
@@ -47,8 +49,8 @@ static void	hdl_here_doc(char *LIMITER)
 		here_doc_child(pipefd, LIMITER);
 	else
 	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDIN_FILENO);
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
 		wait(NULL);
 	}
 }
@@ -104,4 +106,6 @@ int	main(int ac, char **av, char **env)
 		ft_tipeu(av[i++], env);
 	dup2(outfile, STDOUT_FILENO);
 	exec_cmd(av[ac - 2], env);
+	close(outfile);
+	close(infile);
 }

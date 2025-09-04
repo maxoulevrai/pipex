@@ -22,7 +22,7 @@ OBJS = $(SRCS:%.c=build/%.o)
 BONUS_OBJS = $(BONUS_SRC:%.c=build/%.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g 
+CFLAGS = -Wall -Wextra -Werror -g
 
 all: $(NAME)
 

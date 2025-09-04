@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 15:00:49 by maleca            #+#    #+#             */
-/*   Updated: 2025/08/30 21:51:45 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/04 16:28:07 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	int		i;
 	int		j;
 
-	if (!s1)
-	{
-		s1 = ft_calloc(1, sizeof(char));
-		if (!s1)
-			return (NULL);
-	}
 	i = -1;
 	j = 0;
 	joined_args = NULL;
@@ -37,6 +31,5 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	while (s2[j])
 		joined_args[i++] = s2[j++];
 	joined_args[i] = '\0';
-	free((char *)s1);
 	return (joined_args);
 }
