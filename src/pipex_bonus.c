@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/04 19:46:42 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/05 18:05:38 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,23 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 
 	limiter_nl = ft_strjoin(LIMITER, "\n");
 	close(pipefd[0]);
-	line = get_next_line(STDIN_FILENO);
+	line = get_next_line(STDIN_FILENO, LIMITER);
 	while (line)
 	{
 		if (ft_strncmp(line, limiter_nl, ft_strlen(limiter_nl)) == 0)
 		{
+			close(pipefd[1]);
 			free(limiter_nl);
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
 		write(pipefd[1], line, ft_strlen(line));
 		free(line);
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(STDIN_FILENO, LIMITER);
 	}
 	free(limiter_nl);
 	free(line);
+	close(pipefd[1]);
 }
 static void	hdl_here_doc(char *LIMITER)
 {
@@ -101,11 +103,11 @@ int	main(int ac, char **av, char **env)
 		infile = open(av[1], O_RDONLY, 0644);
 		outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(infile, STDIN_FILENO);
+		close(infile);
 	}
 	while (i < ac - 2)
 		ft_tipeu(av[i++], env);
 	dup2(outfile, STDOUT_FILENO);
-	exec_cmd(av[ac - 2], env);
 	close(outfile);
-	close(infile);
+	exec_cmd(av[ac - 2], env);
 }

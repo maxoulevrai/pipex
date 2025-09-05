@@ -6,11 +6,11 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 04:04:54 by maleca            #+#    #+#             */
-/*   Updated: 2025/05/03 17:09:23 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/05 17:50:13 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf.h"
+#include "../../../libft.h"
 
 void	ft_putnbrf(int n, size_t *count)
 {

@@ -6,20 +6,21 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:58:33 by maleca            #+#    #+#             */
-/*   Updated: 2025/08/30 22:31:23 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/05 17:46:43 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <sys/wait.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
-# include <fcntl.h>
+# include <stdarg.h>
 # include <stdio.h>
+# include <fcntl.h>
 # include <string.h>
-# include <sys/wait.h>
+# include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -90,11 +91,11 @@ void	ft_putnbrf(int n, size_t *count);
 void	ft_putaddyf(unsigned long long adresse, size_t *count);
 void	ft_putnbr_basef(unsigned long long nb, char *base, size_t *count);
 
-size_t	gnl_len(char *str);
-void	stash_cleanup(char **stash);
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, char *LIMITER);
 char	*ft_strchr_gnl(char *str, char c);
-char	*ft_strjoin_gnl(char *stash, char *buff);
+void	stash_cleanup(char **stash);
 char	*read_and_store(int fd, char *stash, int *flag);
+size_t	gnl_len(char *str);
+char	*ft_strjoin_gnl(char *stash, char *buff);
 
 #endif
