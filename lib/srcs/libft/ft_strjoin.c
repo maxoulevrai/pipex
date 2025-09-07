@@ -6,11 +6,11 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 15:00:49 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/04 16:28:07 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/07 20:09:03 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft.h"
+#include "../../includes/libft.h"
 
 char	*ft_strjoin(const char *s1, const char *s2)
 {

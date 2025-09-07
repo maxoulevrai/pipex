@@ -6,16 +6,19 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/04 19:04:59 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/07 20:16:21 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	hdl_error(char *err_msg)
+void	hdl_error(char *err_msg, char *arg)
 {
-	ft_printf("pipex: ");
-	perror(err_msg);
+	ft_fprintf(STDERR_FILENO, "pipex: ");
+	if (arg)
+		ft_fprintf(STDERR_FILENO, err_msg, arg);
+	else
+		ft_fprintf(STDERR_FILENO, err_msg);
 	exit(EXIT_FAILURE);
 }
 
@@ -79,14 +82,13 @@ void	exec_cmd(char *cmd, char **env)
 	char	*path;
 
 	if (!cmd || !cmd[0])
-		hdl_error("invalid command");
+		hdl_error("ayoooo: %s\n", cmd);
 	s_cmd = ft_split(cmd, ' ');
 	path = get_path(s_cmd[0], env);
-	printf("%s\n", path);
 	if (execve(path, s_cmd, env) == -1)
 	{
 		free_dtab(s_cmd);
 		free(path);
-		hdl_error("cmd not found");
+		hdl_error("command not found: %s\n", cmd);
 	}
 }

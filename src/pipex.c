@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/04 19:04:51 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/07 20:32:17 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 	if (fd == -1)
 	{
 		close(pipefd[1]);
-		hdl_error("issue with the infile");
+		hdl_error("no such file or directory: %s\n", av[1]);
 	}
 	dup2(fd, STDIN_FILENO);
 	dup2(pipefd[1], STDOUT_FILENO);
@@ -38,7 +38,7 @@ static void	ft_tipeu2(char **av, char **env, int pipefd[2])
 	if (fd == -1)
 	{
 		close(pipefd[0]);
-		hdl_error("failed creating the outfile\n");
+		hdl_error("failed creating file: %s\n", av[4]);
 	}
 	dup2(fd, STDOUT_FILENO);
 	dup2(pipefd[0], STDIN_FILENO);
@@ -52,11 +52,11 @@ int	main(int ac, char **av, char **env)
 	int		pid;
 
 	if (ac < 5)
-		hdl_error("too few arguments");
+		hdl_error("too few arguments\n", NULL);
 	if (ac > 5)
-		hdl_error("too many arguments");
+		hdl_error("too many arguments\n", NULL);
 	if (pipe(pipefd) == -1)
-		hdl_error("pipe\n");
+		hdl_error("pipe() failed at main()\n", NULL);
 	pid = fork();
 	if (pid == 0)
 		ft_tipeu1(av, env, pipefd);

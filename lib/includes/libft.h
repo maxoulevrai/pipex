@@ -6,25 +6,23 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:58:33 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/05 17:46:43 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/07 20:40:14 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <sys/wait.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdarg.h>
-# include <stdio.h>
-# include <fcntl.h>
+# include <limits.h>
 # include <string.h>
 # include <limits.h>
+# include <stdio.h>
+# include <string.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
+# include <sys/wait.h>
+# include <fcntl.h>
 
 typedef struct s_list
 {
@@ -83,19 +81,5 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
-
-int		ft_printf(const char *str, ...);
-void	ft_putcharf(char c, size_t *count);
-void	ft_putstrf(char *str, size_t *count);
-void	ft_putnbrf(int n, size_t *count);
-void	ft_putaddyf(unsigned long long adresse, size_t *count);
-void	ft_putnbr_basef(unsigned long long nb, char *base, size_t *count);
-
-char	*get_next_line(int fd, char *LIMITER);
-char	*ft_strchr_gnl(char *str, char c);
-void	stash_cleanup(char **stash);
-char	*read_and_store(int fd, char *stash, int *flag);
-size_t	gnl_len(char *str);
-char	*ft_strjoin_gnl(char *stash, char *buff);
 
 #endif
