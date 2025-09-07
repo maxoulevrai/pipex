@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/07 21:08:02 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/07 22:43:20 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 	free(limiter_nl);
 	free(line);
 }
+
 
 static void	hdl_here_doc(char *LIMITER, int ac)
 {
