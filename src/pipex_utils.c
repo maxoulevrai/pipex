@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/07 20:16:21 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/09 18:16:08 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ char	*get_path(char *cmd, char **env)
 		free(ret);
 		i++;
 	}
-	return (free_path_list(path_list, 0), NULL);
+	free_path_list(path_list, 0);
+	return (NULL);
 }
 
 void	exec_cmd(char *cmd, char **env)
@@ -85,10 +86,10 @@ void	exec_cmd(char *cmd, char **env)
 		hdl_error("ayoooo: %s\n", cmd);
 	s_cmd = ft_split(cmd, ' ');
 	path = get_path(s_cmd[0], env);
-	if (execve(path, s_cmd, env) == -1)
+	if (!path)
 	{
 		free_dtab(s_cmd);
-		free(path);
 		hdl_error("command not found: %s\n", cmd);
 	}
+	execve(path, s_cmd, env);
 }

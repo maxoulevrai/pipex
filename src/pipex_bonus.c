@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/07 22:43:20 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/09 18:14:07 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 	free(limiter_nl);
 	free(line);
 }
-
 
 static void	hdl_here_doc(char *LIMITER, int ac)
 {
@@ -88,23 +87,15 @@ static void	ft_tipeu(char *av, char **env)
 
 static void	ult_cmd(int ac, char **av, char **env)
 {
-	int	outfile;
+	pid_t	pid;
 
-	if (ft_strncmp(av[1], "here_doc", 8) == 0)
-	{
-		outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (outfile == -1)
-			hdl_error("failed creating file: %s\n", av[ac - 1]);
-	}
+	pid = fork();
+	if (pid == -1)
+		hdl_error("fork() failed at ult_cmd()\n", NULL);
+	if (pid == 0)
+		exec_ult(ac, av, env);
 	else
-	{
-		outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (outfile == -1)
-			hdl_error("failed creating file: %s\n", av[ac - 1]);
-	}
-	dup2(outfile, STDOUT_FILENO);
-	close(outfile);
-	exec_cmd(av[ac - 2], env);
+		wait(NULL);
 }
 
 int	main(int ac, char **av, char **env)
@@ -124,14 +115,12 @@ int	main(int ac, char **av, char **env)
 		i = 2;
 		infile = open(av[1], O_RDONLY, 0644);
 		if (infile == -1)
-			hdl_error("no such file or directory: %s\n", av[1]);
+			ft_fprintf(STDERR_FILENO, "no such file or directory: %s\n", av[1]);
 		dup2(infile, STDIN_FILENO);
 		close(infile);
 	}
 	while (i < ac - 2)
 		ft_tipeu(av[i++], env);
 	ult_cmd(ac, av, env);
-	while (wait(NULL) > 0)
-		;
 	return (0);
 }

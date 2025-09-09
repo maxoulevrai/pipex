@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/07 20:32:17 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/09 17:06:35 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 	dup2(fd, STDIN_FILENO);
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(fd);
+	close(pipefd[1]);
 	exec_cmd(av[2], env);
 }
 
@@ -43,6 +44,7 @@ static void	ft_tipeu2(char **av, char **env, int pipefd[2])
 	dup2(fd, STDOUT_FILENO);
 	dup2(pipefd[0], STDIN_FILENO);
 	close(fd);
+	close(pipefd[0]);
 	exec_cmd(av[3], env);
 }
 

@@ -16,7 +16,8 @@ SRCS = $(SRCS_DIR)pipex.c \
 		$(SRCS_DIR)pipex_utils.c
 
 BONUS_SRC = $(SRCS_DIR)pipex_bonus.c \
-			$(SRCS_DIR)pipex_utils.c
+			$(SRCS_DIR)pipex_utils.c \
+			$(SRCS_DIR)pipex_utils_bonus.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 BONUS_OBJS = $(BONUS_SRC:%.c=build/%.o)
