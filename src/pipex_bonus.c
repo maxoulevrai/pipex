@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:08:31 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/09 18:14:07 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/12 22:45:02 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 			close(pipefd[1]);
 			free(limiter_nl);
 			free(line);
-			exit(EXIT_SUCCESS);
+			_exit(EXIT_SUCCESS);
 		}
 		write(pipefd[1], line, ft_strlen(line));
 		free(line);
@@ -36,6 +36,7 @@ static void	here_doc_child(int pipefd[2], char *LIMITER)
 	close(pipefd[1]);
 	free(limiter_nl);
 	free(line);
+	_exit(EXIT_SUCCESS);
 }
 
 static void	hdl_here_doc(char *LIMITER, int ac)
@@ -44,12 +45,15 @@ static void	hdl_here_doc(char *LIMITER, int ac)
 	int		pipefd[2];
 
 	if (ac < 6)
-		hdl_error("too few arguments\n", NULL);
+	{
+		ft_fprintf(STDERR_FILENO, "too few arguments\n");
+		_exit(EXIT_FAILURE);
+	}
 	if (pipe(pipefd) == -1)
-		hdl_error("pipe() failed at hdl_here_doc()\n", NULL);
+		hdl_error(NULL, errno);
 	pid = fork();
 	if (pid == -1)
-		hdl_error("fork() failed at hdl_here_doc()\n", NULL);
+		hdl_error(NULL, errno);
 	if (pid == 0)
 		here_doc_child(pipefd, LIMITER);
 	else
@@ -66,10 +70,10 @@ static void	ft_tipeu(char *av, char **env)
 	int		pipefd[2];
 
 	if (pipe(pipefd) == -1)
-		hdl_error("pipe() failed at ft_tipeu()\n", NULL);
+		hdl_error(NULL, errno);
 	pid = fork();
 	if (pid == -1)
-		hdl_error("fork() failed at ft_tipeu()\n", NULL);
+		hdl_error(NULL, errno);
 	if (pid == 0)
 	{
 		close(pipefd[0]);
@@ -91,11 +95,11 @@ static void	ult_cmd(int ac, char **av, char **env)
 
 	pid = fork();
 	if (pid == -1)
-		hdl_error("fork() failed at ult_cmd()\n", NULL);
+		hdl_error(NULL, errno);
 	if (pid == 0)
 		exec_ult(ac, av, env);
 	else
-		wait(NULL);
+		return ;
 }
 
 int	main(int ac, char **av, char **env)
@@ -104,7 +108,8 @@ int	main(int ac, char **av, char **env)
 	int	infile;
 
 	if (ac < 5)
-		hdl_error("too few arguments\n", NULL);
+		return (ft_fprintf(STDERR_FILENO, "too few arguments\n"), EXIT_FAILURE);
+	errno = 0;
 	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 	{
 		hdl_here_doc(av[2], ac);
@@ -115,12 +120,13 @@ int	main(int ac, char **av, char **env)
 		i = 2;
 		infile = open(av[1], O_RDONLY, 0644);
 		if (infile == -1)
-			ft_fprintf(STDERR_FILENO, "no such file or directory: %s\n", av[1]);
+			hdl_error(av[1], errno);
 		dup2(infile, STDIN_FILENO);
 		close(infile);
 	}
 	while (i < ac - 2)
 		ft_tipeu(av[i++], env);
 	ult_cmd(ac, av, env);
+	check_exit();
 	return (0);
 }

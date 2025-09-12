@@ -17,7 +17,8 @@ SRCS = $(SRCS_DIR)pipex.c \
 
 BONUS_SRC = $(SRCS_DIR)pipex_bonus.c \
 			$(SRCS_DIR)pipex_utils.c \
-			$(SRCS_DIR)pipex_utils_bonus.c
+			$(SRCS_DIR)bonus_utils.c \
+
 
 OBJS = $(SRCS:%.c=build/%.o)
 BONUS_OBJS = $(BONUS_SRC:%.c=build/%.o)
@@ -32,11 +33,10 @@ $(NAME): $(OBJS) $(LIB)
 	@$(CC) $(CFLAGS) -o $@ $^ 
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
 
-bonus: $(BONUS_NAME)
-
-$(BONUS_NAME): $(BONUS_OBJS) $(LIB) 
-	@echo "$(GREEN)Linking $@$(NO_COLOR)"
-	@$(CC) $(CFLAGS) -o $@ $^ 
+bonus: $(BONUS_OBJS) $(LIB)
+	@echo "$(GREEN)Linking bonus$(RESET)"
+	@$(CC) $(CFLAGS) -o $(NAME) $^
+	@echo "$(GREEN)Bonus build complete$(RESET)"
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
 
 $(LIB):

@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/09 17:06:35 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/12 22:23:22 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	ft_tipeu1(char **av, char **env, int pipefd[2])
 	if (fd == -1)
 	{
 		close(pipefd[1]);
-		hdl_error("no such file or directory: %s\n", av[1]);
+		hdl_error(av[1], errno);
 	}
 	dup2(fd, STDIN_FILENO);
 	dup2(pipefd[1], STDOUT_FILENO);
@@ -39,7 +39,7 @@ static void	ft_tipeu2(char **av, char **env, int pipefd[2])
 	if (fd == -1)
 	{
 		close(pipefd[0]);
-		hdl_error("failed creating file: %s\n", av[4]);
+		hdl_error(av[4], errno);
 	}
 	dup2(fd, STDOUT_FILENO);
 	dup2(pipefd[0], STDIN_FILENO);
@@ -54,11 +54,12 @@ int	main(int ac, char **av, char **env)
 	int		pid;
 
 	if (ac < 5)
-		hdl_error("too few arguments\n", NULL);
+		return (ft_fprintf(STDERR_FILENO, "too few arguments\n"), EXIT_FAILURE);
 	if (ac > 5)
-		hdl_error("too many arguments\n", NULL);
+		return (ft_fprintf(STDERR_FILENO, "too many arguments\n"), EXIT_FAILURE);
+	errno = 0;
 	if (pipe(pipefd) == -1)
-		hdl_error("pipe() failed at main()\n", NULL);
+		hdl_error(NULL, errno);
 	pid = fork();
 	if (pid == 0)
 		ft_tipeu1(av, env, pipefd);
@@ -67,7 +68,6 @@ int	main(int ac, char **av, char **env)
 		ft_tipeu2(av, env, pipefd);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	while (wait(NULL) > 0)
-		;
+	check_exit();
 	return (0);
 }

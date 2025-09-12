@@ -5,31 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 22:26:59 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/09 18:16:08 by maleca           ###   ########.fr       */
+/*   Created: 2025/09/12 18:17:04 by maleca            #+#    #+#             */
+/*   Updated: 2025/09/12 23:03:29 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	hdl_error(char *err_msg, char *arg)
+void	check_exit(void)
 {
-	ft_fprintf(STDERR_FILENO, "pipex: ");
-	if (arg)
-		ft_fprintf(STDERR_FILENO, err_msg, arg);
-	else
-		ft_fprintf(STDERR_FILENO, err_msg);
-	exit(EXIT_FAILURE);
+	int		sig;
+	int		status;
+	int		last_status;
+
+	while (wait(&status) > 0)
+	{
+		if (WIFEXITED(status))
+			last_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			sig = WTERMSIG(status);
+			ft_fprintf(STDERR_FILENO, "pipex: child terminated by signal %d\n", sig);
+			last_status = 128 + sig;
+		}
+	}
+	if (last_status != 0)
+		exit(last_status);
 }
 
-void	free_path_list(char	**path_list, int i)
+void	hdl_error(char *arg, int err_code)
 {
-	if (path_list)
-	{
-		while (path_list[i])
-			free(path_list[i++]);
-		free(path_list);
-	}
+	ft_fprintf(STDERR_FILENO, "pipex: %s", strerror(err_code));
+	if (arg)
+		ft_fprintf(STDERR_FILENO, ": %s\n", arg);
+	else 
+		ft_fprintf(STDERR_FILENO, "\n");
+	ft_fprintf(STDERR_FILENO, "%i\n", err_code);
+	_exit(err_code);
 }
 
 char	**get_path_list(char **env)
@@ -69,11 +81,11 @@ char	*get_path(char *cmd, char **env)
 		ret = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (access(ret, F_OK | X_OK) == 0)
-			return (free_path_list(path_list, i + 1), ret);
+			return (free_dtab(path_list), ret);
 		free(ret);
 		i++;
 	}
-	free_path_list(path_list, 0);
+	free_dtab(path_list);
 	return (NULL);
 }
 
@@ -82,14 +94,23 @@ void	exec_cmd(char *cmd, char **env)
 	char	**s_cmd;
 	char	*path;
 
-	if (!cmd || !cmd[0])
-		hdl_error("ayoooo: %s\n", cmd);
 	s_cmd = ft_split(cmd, ' ');
+	if (!s_cmd || !s_cmd[0])
+	{
+		if (s_cmd)
+			free(s_cmd);
+		ft_fprintf(STDERR_FILENO, "pipex: invalid command: %s\n", cmd);
+		_exit(EXIT_FAILURE);
+	}
 	path = get_path(s_cmd[0], env);
 	if (!path)
 	{
 		free_dtab(s_cmd);
-		hdl_error("command not found: %s\n", cmd);
+		ft_fprintf(STDERR_FILENO, "pipex: invalid command: %s\n", cmd);
+		_exit(EXIT_FAILURE);
 	}
 	execve(path, s_cmd, env);
+	free(path);
+	free_dtab(s_cmd);
+	hdl_error(NULL , errno);
 }
