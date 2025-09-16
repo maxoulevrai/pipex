@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:17:04 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/12 23:03:29 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/16 16:52:40 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,17 @@ void	exec_cmd(char *cmd, char **env)
 		if (s_cmd)
 			free(s_cmd);
 		ft_fprintf(STDERR_FILENO, "pipex: invalid command: %s\n", cmd);
-		_exit(EXIT_FAILURE);
+		_exit(127);
 	}
 	path = get_path(s_cmd[0], env);
 	if (!path)
 	{
 		free_dtab(s_cmd);
 		ft_fprintf(STDERR_FILENO, "pipex: invalid command: %s\n", cmd);
-		_exit(EXIT_FAILURE);
+		_exit(127);
 	}
 	execve(path, s_cmd, env);
 	free(path);
 	free_dtab(s_cmd);
-	hdl_error(NULL , errno);
+	hdl_error(NULL , 127);
 }

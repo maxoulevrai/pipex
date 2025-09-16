@@ -33,9 +33,11 @@ $(NAME): $(OBJS) $(LIB)
 	@$(CC) $(CFLAGS) -o $@ $^ 
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
 
-bonus: $(BONUS_OBJS) $(LIB)
+bonus: $(BONUS_NAME)
+
+$(BONUS_NAME): $(BONUS_OBJS) $(LIB)
 	@echo "$(GREEN)Linking bonus$(RESET)"
-	@$(CC) $(CFLAGS) -o $(NAME) $^
+	@$(CC) $(CFLAGS) -o $@ $^
 	@echo "$(GREEN)Bonus build complete$(RESET)"
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
 
@@ -68,4 +70,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re bonus
-

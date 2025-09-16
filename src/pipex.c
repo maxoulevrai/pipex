@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:09:52 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/12 22:23:22 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/16 16:24:00 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	main(int ac, char **av, char **env)
 	int		pid;
 
 	if (ac < 5)
-		return (ft_fprintf(STDERR_FILENO, "too few arguments\n"), EXIT_FAILURE);
+		return (ft_fprintf(STDERR_FILENO, "pipex: too few arguments\n"), EXIT_FAILURE);
 	if (ac > 5)
-		return (ft_fprintf(STDERR_FILENO, "too many arguments\n"), EXIT_FAILURE);
+		return (ft_fprintf(STDERR_FILENO, "pipex: too many arguments\n"), EXIT_FAILURE);
 	errno = 0;
 	if (pipe(pipefd) == -1)
 		hdl_error(NULL, errno);

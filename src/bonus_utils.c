@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 19:58:14 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/12 22:44:45 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/16 16:55:52 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,4 @@ void	exec_ult(int ac, char **av, char **env)
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec_cmd(av[ac - 2], env);
-	hdl_error(NULL , errno);
 }
