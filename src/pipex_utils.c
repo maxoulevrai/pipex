@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:17:04 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/16 16:52:40 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/19 18:40:47 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@ void	check_exit(void)
 
 void	hdl_error(char *arg, int err_code)
 {
-	ft_fprintf(STDERR_FILENO, "pipex: %s", strerror(err_code));
-	if (arg)
-		ft_fprintf(STDERR_FILENO, ": %s\n", arg);
-	else 
-		ft_fprintf(STDERR_FILENO, "\n");
-	ft_fprintf(STDERR_FILENO, "%i\n", err_code);
+	ft_fprintf(STDERR_FILENO, "pipex: %s: %s\n", strerror(err_code), arg);
 	_exit(err_code);
 }
 
