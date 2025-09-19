@@ -6,7 +6,7 @@
 /*   By: maleca <maleca@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:17:04 by maleca            #+#    #+#             */
-/*   Updated: 2025/09/19 18:40:47 by maleca           ###   ########.fr       */
+/*   Updated: 2025/09/19 19:18:53 by maleca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	check_exit(void)
 {
-	int		sig;
 	int		status;
 	int		last_status;
 
@@ -22,12 +21,6 @@ void	check_exit(void)
 	{
 		if (WIFEXITED(status))
 			last_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-		{
-			sig = WTERMSIG(status);
-			ft_fprintf(STDERR_FILENO, "pipex: child terminated by signal %d\n", sig);
-			last_status = 128 + sig;
-		}
 	}
 	if (last_status != 0)
 		exit(last_status);
