@@ -10,7 +10,7 @@ CYAN			= \e[36m
 RESET			= \e[m
 
 SRCS_DIR = src/
-
+INC = includes/pipex.h
 LIB = lib/libft.a
 SRCS = $(SRCS_DIR)pipex.c \
 		$(SRCS_DIR)pipex_utils.c
@@ -28,13 +28,13 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIB) 
+$(NAME): $(OBJS) $(LIB)
 	@echo "$(GREEN)Linking $@$(NO_COLOR)"
 	@$(CC) $(CFLAGS) -o $@ $^ 
 	@echo "$(GREEN)Build complete$(NO_COLOR)"
 
 bonus: $(BONUS_NAME)
-
+	
 $(BONUS_NAME): $(BONUS_OBJS) $(LIB)
 	@echo "$(GREEN)Linking bonus$(RESET)"
 	@$(CC) $(CFLAGS) -o $@ $^
@@ -43,6 +43,8 @@ $(BONUS_NAME): $(BONUS_OBJS) $(LIB)
 
 $(LIB):
 	@$(MAKE) -C lib lib
+
+$(OBJS) $(BONUS_OBJS): $(INC) | build
 
 $(OBJS): | build
 
